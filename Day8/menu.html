@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zesty Zomato Menu</title>
+</head>
+<body>
+    <h1>Menu</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Availability</th>
+        </tr>
+        {% for dish in menu %}
+        <tr>
+            <td>{{ dish['id'] }}</td>
+            <td>{{ dish['name'] }}</td>
+            <td>{{ dish['price'] }}</td>
+            <td>{{ 'Yes' if dish['availability'] else 'No' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="/add_dish">Add Dish</a>
+    <a href="/review_orders">Review Orders</a>
+</body>
+</html>

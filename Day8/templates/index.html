@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zesty Zomato - Menu</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Menu</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Availability</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dish in dishes %}
+            <tr>
+                <td>{{ dish.id }}</td>
+                <td>{{ dish.name }}</td>
+                <td>{{ dish.price }}</td>
+                <td>{{ 'Yes' if dish.availability else 'No' }}</td>
+                <td>
+                    <button class="edit-btn" data-id="{{ dish.id }}">Edit</button>
+                    <button class="delete-btn" data-id="{{ dish.id }}">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Orders</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer Name</th>
+                <th>Dishes</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.customer_name }}</td>
+                <td>
+                    {% for dish in order.dishes %}
+                        {{ dish.name }}<br>
+                    {% endfor %}
+                </td>
+                <td>{{ order.status }}</td>
+                <td>
+                    <button class="update-btn" data-id="{{ order.id }}">Update Status</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="add-dish-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Dish</h2>
+            <form id="add-dish-form" method="POST" action="/add_dish">
+                <label for="dish-name">Dish Name:</label>
+                <input type="text" id="dish-name" name="dish_name" required>
+                <label for="dish-price">Dish Price:</label>
+                <input type="number" id="dish-price" name="dish_price" min="0" step="0.01" required>
+                <label for="dish-availability">Availability:</label>
+                <input type="checkbox" id="dish-availability" name="dish_availability">
+                <button type="submit">Add Dish</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="edit-dish-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Dish</h2>
+            <form id="edit-dish-form" method="POST" action="/update_dish">
+                <input type="hidden" id="edit-dish-id" name="dish_id">
+                <label for="edit-dish-name">Dish Name:</label>
+                <input type="text" id="edit-dish-name" name="dish_name" required>
+                <label for="edit-dish-price">Dish Price:</label>
+                <input type="number" id="edit-dish-price" name="dish_price" min="0" step="0.01" required>
+                <label for="edit-dish-availability">Availability:</label>
+                <input type="checkbox" id="edit-dish-availability" name="dish_availability">
+                <button type="submit">Update Dish</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="delete-dish-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Delete Dish</h2>
+            <form id="delete-dish-form" method="POST" action="/delete_dish">
+                <input type="hidden" id="delete-dish-id" name="dish_id">
+                <p>Are you sure you want to delete this dish?</p>
+                <button type="submit">Delete Dish</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="take-order-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Take Order</h2>
+            <form id="take-order-form" method="POST" action="/take_order">
+                <label for="customer-name">Customer Name:</label>
+                <input type="text" id="customer-name" name="customer_name" required>
+                <label for="dish-ids">Dish IDs:</label>
+                <select id="dish-ids" name="dish_ids[]" multiple required>
+                    {% for dish in dishes %}
+                        <option value="{{ dish.id }}">{{ dish.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Take Order</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="update-order-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Update Order</h2>
+            <form id="update-order-form" method="POST" action="/update_order">
+                <input type="hidden" id="update-order-id" name="order_id">
+                <label for="update-status">Status:</label>
+                <select id="update-status" name="status">
+                    <option value="Received">Received</option>
+                    <option value="Preparing">Preparing</option>
+                    <option value="Ready for Pickup">Ready for Pickup</option>
+                    <option value="Delivered">Delivered</option>
+                </select>
+                <button type="submit">Update Status</button>
+            </form>
+        </div>
+    </div>
+
+    <button id="add-dish-btn">Add New Dish</button>
+    <button id="take-order-btn">Take Order</button>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
