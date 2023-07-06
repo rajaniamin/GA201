@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zesty Zomato Menu</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</head>
+<body>
+    <h1>Zesty Zomato Menu</h1>
+
+    <h2>Add a New Dish</h2>
+    <form action="/add_dish" method="POST">
+        <label for="dish_name">Dish Name:</label>
+        <input type="text" name="dish_name" required>
+        <br>
+        <label for="price">Price:</label>
+        <input type="text" name="price" required>
+        <br>
+        <label for="availability">Availability:</label>
+        <input type="text" name="availability" required>
+        <br>
+        <input type="submit" value="Add Dish">
+    </form>
+
+    <h2>Dishes</h2>
+    <table>
+        <tr>
+            <th>Dish Name</th>
+            <th>Price</th>
+            <th>Availability</th>
+            <th>Actions</th>
+        </tr>
+        {% for dish in dishes %}
+        <tr>
+            <td>{{ dish[1] }}</td>
+            <td>{{ dish[2] }}</td>
+            <td>{{ dish[3] }}</td>
+            <td>
+                <a href="/update_dish/{{ dish[0] }}">Edit</a>
+                <a href="/remove_dish/{{ dish[0] }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if dish %}
+    <h2>Edit Dish</h2>
+    <form action="/update_dish/{{ dish[0] }}" method="POST">
+        <label for="dish_name">Dish Name:</label>
+        <input type="text" name="dish_name" value="{{ dish[1] }}" required>
+        <br>
+        <label for="price">Price:</label>
+        <input type="text" name="price" value="{{ dish[2] }}" required>
+        <br>
+        <label for="availability">Availability:</label>
+        <input type="text" name="availability" value="{{ dish[3] }}" required>
+        <br>
+        <input type="submit" value="Update Dish">
+    </form>
+    {% endif %}
+</body>
+</html>
